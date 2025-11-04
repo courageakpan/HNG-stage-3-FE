@@ -1,4 +1,3 @@
-import Navbar from "@/components/shared/Navbar";
 import Image from "next/image";
 import React from "react";
 import Button from "@/components/shared/Button";
@@ -6,7 +5,7 @@ import Button from "@/components/shared/Button";
 const Header = () => {
   return (
     <div className="h-[70vh] md:h-[90vh] bg-[url('/images/Header_Bg.png')] md:bg-[url('/images/Header_Bg_2.png')] bg-cover bg-center max-md:bg-black/20 max-md:bg-blend-darken relative">
-      <Navbar />
+  
 
       <div className="container flex items-center max-md:justify-center h-[calc(100%-96px)]">
         <div className="flex flex-col justify-center max-md:items-center space-y-6 ">
