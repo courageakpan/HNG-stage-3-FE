@@ -1,21 +1,31 @@
 import React from "react";
 
+type ButtonVariant = "foreground" | "white" | "orange";
+type ButtonWidth = "fit" | "full";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  variant?: ButtonVariant;
+  width?: ButtonWidth;
+  className?: string;
+}
+
 const Button = ({
   children,
   variant = "foreground",
   width = "fit",
   className = "",
   ...props
-}) => {
+}: ButtonProps) => {
   // Color variant styles
-  const variantStyles = {
+  const variantStyles: Record<ButtonVariant, string> = {
     foreground: "bg-foreground text-white hover:bg-foreground/90",
     white: "bg-white text-foreground hover:bg-gray-100",
     orange: "bg-orange text-white hover:bg-orange/90",
   };
 
   // Width variant styles
-  const widthStyles = {
+  const widthStyles: Record<ButtonWidth, string> = {
     fit: "w-fit",
     full: "w-full",
   };
