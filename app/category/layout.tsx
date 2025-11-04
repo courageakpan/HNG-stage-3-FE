@@ -18,12 +18,12 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body
+    <div lang="en">
+      <main
         className={`${manrope.variable} antialiased`}
       >
         {children}
-      </body>
-    </html>
+      </main>
+    </div>
   );
 }
