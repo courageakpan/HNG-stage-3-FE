@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { headphones } from "@/data/headphones";
+import { earphones } from "@/data/earphones";
 import Image from "next/image";
 import headphone1 from "@/public/images/Group 3 (1).png";
 import headphones2 from "@/public/images/Group 3 (2).png";
@@ -16,7 +16,7 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   const { productId } = useParams();
-  const product = headphones.find((p) => p.id === productId);
+  const product = earphones.find((p) => p.id === productId);
 
   if (!product) return notFound();
 
@@ -28,7 +28,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Go Back */}
       <Link
-        href="/category/headphones"
+        href="/category/earphones"
         className="text-black/60 text-sm hover:text-black transition"
       >
         Go Back
