@@ -49,7 +49,7 @@ export const headphones = [
       { quantity: 1, item: "3.5mm Audio Cable" }
     ],
     gallery: [
-      "/images/Bitmap (3).png",,
+      "/images/Bitmap (3).png",
       "/images/Bitmap (4).png",
       "/images/Bitmap (5).png"
     ],
