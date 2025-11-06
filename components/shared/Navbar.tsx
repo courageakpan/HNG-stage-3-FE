@@ -1,9 +1,16 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Cart from "@/public/svg/Cart.svg";
 import Link from "next/link";
 import Menu from "@/public/svg/Menu.svg";
+import { ShoppingCart } from "lucide-react";
+import CartModal from "@/components/cartModal";
+import { useCartStore } from "@/store/cartStore";
+
 const Navbar = () => {
+  const { openCart, items } = useCartStore();
+
   return (
     <nav className="bg-black relative h-24 z-50">
       <div className="container mx-auto px-6 py-8 flex items-center justify-between border-b border-gray-700">
@@ -46,9 +53,18 @@ const Navbar = () => {
         </div>
 
         {/* Right: Shopping Cart Icon (Clickable) */}
-        <Link href="/cart" className="cursor-pointer">
-          <Image src={Cart} alt="Shopping Cart" width={24} height={24} />
-        </Link>
+        <button
+          onClick={openCart}
+          className="relative"
+        >
+          <ShoppingCart size={22} className="text-white" />
+          {items.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-[#D87D4A] text-white text-xs rounded-full px-1">
+              {items.length}
+            </span>
+          )}
+        </button>
+        <CartModal />
       </div>
     </nav>
   );

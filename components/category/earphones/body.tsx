@@ -37,7 +37,7 @@ export default function EarphonesPage() {
           </p>
 
           <Link
-            href="/product/yx1"
+            href={`/product-details/earphones/1`}
             className="inline-block bg-[#D87D4A] text-white px-8 py-3 uppercase text-sm tracking-wider hover:bg-[#FBAF85] transition"
           >
             See Product

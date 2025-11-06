@@ -67,7 +67,7 @@ export default function SpeakersPage() {
             <p className="text-black/60">{product.description}</p>
 
             <Link
-              href={`/product/${product.slug}`}
+              href={`/product-details/speakers/${product.id}`}
               className="inline-block bg-[#D87D4A] text-white px-8 py-3 uppercase text-sm tracking-wider hover:bg-[#FBAF85] transition"
             >
               See Product
