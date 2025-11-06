@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { action } from "./_generated/server";
 import { api } from "./_generated/api";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
 // Generate HTML email template for order confirmation
 function generateOrderConfirmationEmail(orderData: any) {
@@ -281,31 +281,40 @@ export const sendOrderConfirmationEmail = action({
     console.log(`Subject: Order Confirmation - ${order.orderNumber}`);
     console.log("HTML Content:", emailHtml);
     
-    // Send email using Resend
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    // Send email using Nodemailer
+    // Use environment variables for SMTP configuration
+    const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+    const smtpPort = parseInt(process.env.SMTP_PORT || '587');
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    const fromEmail = process.env.SMTP_FROM_EMAIL || 'noreply@audiophile.com';
     
-    // Use environment variable for from address, fallback to default
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@audiophile.com';
+    // Create a transporter object using SMTP transport
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465, // true for 465, false for other ports
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    });
     
     try {
-      console.log("Sending email with Resend...");
+      console.log("Sending email with Nodemailer...");
       console.log(`From: ${fromEmail}`);
       console.log(`To: ${order.customerEmail}`);
       console.log(`Subject: Order Confirmation - ${order.orderNumber}`);
+      console.log(`SMTP Host: ${smtpHost}:${smtpPort}`);
       
-      const { data, error } = await resend.emails.send({
+      const info = await transporter.sendMail({
         from: fromEmail,
-        to: [order.customerEmail],
+        to: order.customerEmail,
         subject: `Order Confirmation - ${order.orderNumber}`,
         html: emailHtml,
       });
       
-      if (error) {
-        console.error("Resend API error:", error);
-        throw new Error(`Failed to send email: ${error.message}`);
-      }
-      
-      console.log("Email sent successfully:", data);
+      console.log("Email sent successfully:", info.messageId);
       
     } catch (error) {
       console.error("Failed to send email:", error);

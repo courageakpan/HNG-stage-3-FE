@@ -1,9 +1,8 @@
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
-import Production from "@/components/shared/production";
-import About from "@/components/shared/about";
 import Footer from "@/components/shared/footer";
+import ConvexClientProvider from "@/components/ConvexClientProvider";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -23,17 +22,18 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body
-        className={`${manrope.variable} antialiased`}
-      >
-        <Navbar/>
-        {children}
+      <body className={`${manrope.variable} antialiased bg-[#101010] text-white`}>
+        <ConvexClientProvider>
+          {/* Navbar at the top of all pages */}
+          <Navbar />
+
+          {/* Page content */}
+          <main>{children}</main>
+
+          {/* Shared sections below all pages */}
+          <Footer />
+        </ConvexClientProvider>
       </body>
-      
-      <Production/>
-      <About/>
-      <Footer/>
-      
     </html>
   );
 }
