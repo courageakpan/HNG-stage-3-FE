@@ -289,6 +289,24 @@ export const sendOrderConfirmationEmail = action({
     const smtpPass = process.env.SMTP_PASS;
     const fromEmail = process.env.SMTP_FROM_EMAIL || 'noreply@audiophile.com';
     
+    // Check if SMTP credentials are properly configured
+    if (!smtpUser || !smtpPass || smtpUser === 'your-email@gmail.com' || smtpPass === 'your-app-password') {
+      console.error("SMTP credentials are not properly configured. Please update your .env.local file with valid SMTP credentials.");
+      console.log("Current configuration:");
+      console.log(`- SMTP Host: ${smtpHost}`);
+      console.log(`- SMTP Port: ${smtpPort}`);
+      console.log(`- SMTP User: ${smtpUser}`);
+      console.log(`- SMTP Pass: ${smtpPass ? '***' : 'NOT SET'}`);
+      console.log(`- From Email: ${fromEmail}`);
+      
+      // In development, we might want to continue even if email fails
+      if (process.env.NODE_ENV === 'development') {
+        console.warn("Email sending skipped due to missing SMTP configuration in development mode, continuing...");
+        return { success: true, email: order.customerEmail, warning: "Email not sent - SMTP credentials not configured" };
+      }
+      throw new Error("SMTP credentials are not properly configured. Please update your environment variables.");
+    }
+    
     // Create a transporter object using SMTP transport
     const transporter = nodemailer.createTransport({
       host: smtpHost,
@@ -318,10 +336,17 @@ export const sendOrderConfirmationEmail = action({
       
     } catch (error) {
       console.error("Failed to send email:", error);
+      
+      // Log detailed error information
+      if (error instanceof Error) {
+        console.error("Error message:", error.message);
+        console.error("Error stack:", error.stack);
+      }
+      
       // In development, we might want to continue even if email fails
       if (process.env.NODE_ENV === 'development') {
         console.warn("Email sending failed in development mode, continuing...");
-        return { success: true, email: order.customerEmail, warning: "Email not sent in development" };
+        return { success: true, email: order.customerEmail, warning: `Email not sent: ${error instanceof Error ? error.message : 'Unknown error'}` };
       }
       throw new Error("Failed to send confirmation email");
     }
